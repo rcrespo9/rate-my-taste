@@ -1,7 +1,13 @@
 <template>
-  <div />
+  <RateMyTastes />
 </template>
 
 <script>
-export default {}
+import RateMyTastes from '@/components/RateMyTastes.vue'
+
+export default {
+  components: {
+    RateMyTastes
+  }
+}
 </script>
