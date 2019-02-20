@@ -15,7 +15,7 @@
         hide-selected
         label="Favorite Movies"
         placeholder="Start typing to search movies..."
-        prepend-icon="mdi-filmstrip"
+        prepend-icon="local_movies"
         return-object
       />
       <v-autocomplete
@@ -26,7 +26,7 @@
         hide-selected
         label="Favorite Books"
         placeholder="Start typing to search books..."
-        prepend-icon="mdi-book-multiple"
+        prepend-icon="library_books"
         return-object
       />
       <v-autocomplete
@@ -37,7 +37,7 @@
         hide-selected
         label="Favorite Video Games"
         placeholder="Start typing to search video games..."
-        prepend-icon="mdi-gamepad-variant"
+        prepend-icon="games"
         return-object
       />
     </v-card-text>
