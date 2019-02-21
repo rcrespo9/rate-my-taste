@@ -68,9 +68,10 @@ async function start() {
       const query = req.query.q
 
       const response = await fetch(
-        `https://api-v3.igdb.com/games/?search=${query}`,
+        `https://api-v3.igdb.com/games/?search=${query}&fields=name,total_rating&filter[total_rating][not_eq]=null&limit=10`,
         {
           headers: {
+            Accept: 'application/json',
             'user-key': IGDB_API_KEY
           }
         }
