@@ -68,7 +68,7 @@ async function start() {
       const query = req.query.q
 
       const response = await fetch(
-        `https://api-v3.igdb.com/games/search="${query}"`,
+        `https://api-v3.igdb.com/games/?search=${query}`,
         {
           headers: {
             'user-key': IGDB_API_KEY
