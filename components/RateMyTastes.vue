@@ -8,10 +8,10 @@
     </v-toolbar>
     <v-card-text>
       <v-subheader>Discover the average ratings of your favorite books, movies or video games.</v-subheader>
-      <v-combobox
+      <v-autocomplete
         v-model="selectedMovies"
         :items="moviesResults"
-        :loading="isLoading"
+        :loading="isMoviesLoading"
         :search-input.sync="movieQuery"
         hide-no-data
         hide-selected
@@ -20,10 +20,10 @@
         prepend-icon="local_movies"
         return-object
       />
-      <v-combobox
+      <v-autocomplete
         v-model="selectedBooks"
         :items="booksResults"
-        :loading="isLoading"
+        :loading="isBooksLoading"
         :search-input.sync="bookQuery"
         hide-no-data
         hide-selected
@@ -32,10 +32,10 @@
         prepend-icon="library_books"
         return-object
       />
-      <v-combobox
+      <v-autocomplete
         v-model="selectedVideoGames"
         :items="videoGamesResults"
-        :loading="isLoading"
+        :loading="isGamesLoading"
         :search-input.sync="videoGameQuery"
         hide-no-data
         hide-selected
@@ -49,20 +49,55 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
+
 export default {
   name: 'RateMyTastes',
   data: () => ({
-    selectedMovies: [],
-    selectedBooks: [],
-    selectedVideoGames: [],
+    selectedMovies: '',
+    selectedBooks: '',
+    selectedVideoGames: '',
     movieQuery: null,
     videoGameQuery: null,
     bookQuery: null,
     moviesResults: [],
     booksResults: [],
     videoGamesResults: [],
-    isLoading: false
-  })
+    isMoviesLoading: false,
+    isBooksLoading: false,
+    isGamesLoading: false,
+    errors: []
+  }),
+  watch: {
+    movieQuery(val) {
+      this.isMoviesLoading = true
+
+      this.debouncedMovieResults(val)
+    }
+  },
+  methods: {
+    debouncedMovieResults: debounce(async function debouncedMovieResults(
+      query
+    ) {
+      try {
+        const res = await this.$axios.$get(`/api/movies?q=${query}`)
+
+        /* eslint-disable no-console */
+        console.log(res)
+        /* eslint-disable no-console */
+
+        if (res.Response === 'True') {
+          this.moviesResults = res.Search.map(movie => movie.Title)
+          this.isMoviesLoading = false
+        } else {
+          this.moviesResults = []
+        }
+      } catch (error) {
+        throw new Error(error)
+      }
+    },
+    500)
+  }
 }
 </script>
 
