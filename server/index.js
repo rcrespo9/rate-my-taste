@@ -52,10 +52,11 @@ async function start() {
         `https://www.goodreads.com/search.xml?key=${GOODREADS_API_KEY}&q=${query}`
       )
       const results = await response.text()
-      const convertedResults = convert.xml2json(results, {
-        compact: false,
-        spaces: 4
-      })
+      const convertedResults = JSON.parse(
+        convert.xml2json(results, {
+          compact: true
+        })
+      )
 
       res.json(convertedResults)
     } catch (error) {
