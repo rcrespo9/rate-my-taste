@@ -1,7 +1,10 @@
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
+const convert = require('xml-js')
 const app = express()
+
+require('isomorphic-fetch')
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -16,6 +19,8 @@ async function start() {
     port = process.env.PORT || 3000
   } = nuxt.options.server
 
+  const { GOODREADS_API_KEY, IGDB_API_KEY, OMDB_API_KEY } = process.env
+
   // Build only in dev mode
   if (config.dev) {
     const builder = new Builder(nuxt)
@@ -23,6 +28,60 @@ async function start() {
   } else {
     await nuxt.ready()
   }
+
+  app.get('/api/movies', async (req, res) => {
+    try {
+      const query = req.query.q
+
+      const response = await fetch(
+        `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}`
+      )
+      const results = await response.json()
+
+      res.json(results)
+    } catch (error) {
+      throw new Error(error)
+    }
+  })
+
+  app.get('/api/books', async (req, res) => {
+    try {
+      const query = req.query.q
+
+      const response = await fetch(
+        `https://www.goodreads.com/search.xml?key=${GOODREADS_API_KEY}&q=${query}`
+      )
+      const results = await response.text()
+      const convertedResults = convert.xml2json(results, {
+        compact: false,
+        spaces: 4
+      })
+
+      res.json(convertedResults)
+    } catch (error) {
+      throw new Error(error)
+    }
+  })
+
+  app.get('/api/games', async (req, res) => {
+    try {
+      const query = req.query.q
+
+      const response = await fetch(
+        `https://api-v3.igdb.com/games/search="${query}"`,
+        {
+          headers: {
+            'user-key': IGDB_API_KEY
+          }
+        }
+      )
+      const results = await response.json()
+
+      res.json(results)
+    } catch (error) {
+      throw new Error(error)
+    }
+  })
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
