@@ -8,7 +8,7 @@
     </v-toolbar>
     <v-card-text>
       <v-subheader>Discover the average ratings of your favorite books, movies or video games.</v-subheader>
-      <v-autocomplete
+      <v-combobox
         v-model="selectedMovies"
         :items="moviesResults"
         :loading="isLoading"
@@ -20,7 +20,7 @@
         prepend-icon="local_movies"
         return-object
       />
-      <v-autocomplete
+      <v-combobox
         v-model="selectedBooks"
         :items="booksResults"
         :loading="isLoading"
@@ -32,7 +32,7 @@
         prepend-icon="library_books"
         return-object
       />
-      <v-autocomplete
+      <v-combobox
         v-model="selectedVideoGames"
         :items="videoGamesResults"
         :loading="isLoading"
