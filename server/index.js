@@ -34,7 +34,7 @@ async function start() {
       const query = req.query.q
 
       const response = await fetch(
-        `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}`
+        `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&type=movie`
       )
       const results = await response.json()
 
