@@ -7,7 +7,9 @@
       <v-toolbar-title>Rate My Tastes</v-toolbar-title>
     </v-toolbar>
     <v-card-text>
+      <v-subheader>Discover the average ratings of your favorite books, movies or video games.</v-subheader>
       <v-autocomplete
+        v-model="selectedMovies"
         :items="moviesResults"
         :loading="isLoading"
         :search-input.sync="movieQuery"
@@ -19,6 +21,7 @@
         return-object
       />
       <v-autocomplete
+        v-model="selectedBooks"
         :items="booksResults"
         :loading="isLoading"
         :search-input.sync="bookQuery"
@@ -30,6 +33,7 @@
         return-object
       />
       <v-autocomplete
+        v-model="selectedVideoGames"
         :items="videoGamesResults"
         :loading="isLoading"
         :search-input.sync="videoGameQuery"
@@ -48,6 +52,9 @@
 export default {
   name: 'RateMyTastes',
   data: () => ({
+    selectedMovies: [],
+    selectedBooks: [],
+    selectedVideoGames: [],
     movieQuery: null,
     videoGameQuery: null,
     bookQuery: null,
