@@ -74,6 +74,8 @@ export default {
         this.isMoviesLoading = true
 
         this.debouncedMovieResults(val)
+      } else if (!val.length) {
+        this.moviesResults = []
       }
     }
   },
@@ -86,8 +88,6 @@ export default {
 
         if (res.Response === 'True') {
           this.moviesResults = res.Search.map(movie => movie.Title)
-        } else {
-          this.moviesResults = []
         }
 
         this.isMoviesLoading = false
