@@ -8,8 +8,9 @@
     </v-toolbar>
     <v-card-text>
       <v-subheader>Discover the average ratings of your favorite books, movies or video games.</v-subheader>
-      <v-autocomplete
+      <v-combobox
         v-model="selectedMovies"
+        multiple
         :items="moviesResults"
         :loading="isMoviesLoading"
         :search-input.sync="movieQuery"
@@ -70,11 +71,11 @@ export default {
   }),
   watch: {
     movieQuery(val) {
-      if (val.length > 2) {
+      if (val && val.length > 2) {
         this.isMoviesLoading = true
 
         this.debouncedMovieResults(val)
-      } else if (!val.length) {
+      } else if (!val) {
         this.moviesResults = []
       }
     }
