@@ -8,9 +8,10 @@
     </v-toolbar>
     <v-card-text>
       <v-subheader>Discover the average ratings of your favorite books, movies or video games.</v-subheader>
-      <v-combobox
+      <v-autocomplete
         v-model="selectedMovies"
         :items="moviesResults"
+        item-text="Title"
         :loading="isMoviesLoading"
         :search-input.sync="movieQuery"
         hide-no-data
@@ -90,7 +91,7 @@ export default {
         const res = await this.$axios.$get(`/api/movies?q=${query}`)
 
         if (res.Response === 'True') {
-          this.moviesResults = res.Search.map(movie => movie.Title)
+          this.moviesResults = res.Search
         }
 
         this.isMoviesLoading = false
