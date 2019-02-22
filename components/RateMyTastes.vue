@@ -70,9 +70,11 @@ export default {
   }),
   watch: {
     movieQuery(val) {
-      this.isMoviesLoading = true
+      if (val.length > 2) {
+        this.isMoviesLoading = true
 
-      this.debouncedMovieResults(val)
+        this.debouncedMovieResults(val)
+      }
     }
   },
   methods: {
@@ -82,16 +84,13 @@ export default {
       try {
         const res = await this.$axios.$get(`/api/movies?q=${query}`)
 
-        /* eslint-disable no-console */
-        console.log(res)
-        /* eslint-disable no-console */
-
         if (res.Response === 'True') {
           this.moviesResults = res.Search.map(movie => movie.Title)
-          this.isMoviesLoading = false
         } else {
           this.moviesResults = []
         }
+
+        this.isMoviesLoading = false
       } catch (error) {
         throw new Error(error)
       }
