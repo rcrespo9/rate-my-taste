@@ -10,12 +10,14 @@
       <v-subheader>Discover the average ratings of your favorite books, movies or video games.</v-subheader>
       <v-combobox
         v-model="selectedMovies"
-        multiple
         :items="moviesResults"
         :loading="isMoviesLoading"
         :search-input.sync="movieQuery"
         hide-no-data
         hide-selected
+        multiple
+        chips
+        deletable-chips
         label="Favorite Movies"
         placeholder="Start typing to search movies..."
         prepend-icon="local_movies"
