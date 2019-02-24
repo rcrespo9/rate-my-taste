@@ -27,10 +27,14 @@
       <v-autocomplete
         v-model="selectedBooks"
         :items="booksResults"
+        item-text="best_book.title._text"
         :loading="isBooksLoading"
         :search-input.sync="bookQuery"
         hide-no-data
         hide-selected
+        multiple
+        chips
+        deletable-chips
         label="Favorite Books"
         placeholder="Start typing to search books..."
         prepend-icon="library_books"
@@ -94,6 +98,15 @@ export default {
       } else if (!val) {
         this.videoGamesResults = []
       }
+    },
+    bookQuery(val) {
+      if (val && val.length > 2) {
+        this.isBooksLoading = true
+
+        this.debouncedBooksResults(val)
+      } else if (!val) {
+        this.booksResults = []
+      }
     }
   },
   methods: {
@@ -122,6 +135,19 @@ export default {
         this.videoGamesResults = res
 
         this.isGamesLoading = false
+      } catch (error) {
+        throw new Error(error)
+      }
+    }),
+    debouncedBooksResults: debounce(async function debouncedBooksResults(
+      query
+    ) {
+      try {
+        const res = await this.$axios.$get(`/api/books?q=${query}`)
+
+        this.booksResults = res.GoodreadsResponse.search.results.work
+
+        this.isBooksLoading = false
       } catch (error) {
         throw new Error(error)
       }
