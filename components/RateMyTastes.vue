@@ -39,10 +39,14 @@
       <v-autocomplete
         v-model="selectedVideoGames"
         :items="videoGamesResults"
+        item-text="name"
         :loading="isGamesLoading"
         :search-input.sync="videoGameQuery"
         hide-no-data
         hide-selected
+        multiple
+        chips
+        deletable-chips
         label="Favorite Video Games"
         placeholder="Start typing to search video games..."
         prepend-icon="games"
@@ -81,6 +85,15 @@ export default {
       } else if (!val) {
         this.moviesResults = []
       }
+    },
+    videoGameQuery(val) {
+      if (val && val.length > 2) {
+        this.isGamesLoading = true
+
+        this.debouncedGamesResults(val)
+      } else if (!val) {
+        this.videoGamesResults = []
+      }
     }
   },
   methods: {
@@ -99,7 +112,20 @@ export default {
         throw new Error(error)
       }
     },
-    500)
+    500),
+    debouncedGamesResults: debounce(async function debouncedGamesResults(
+      query
+    ) {
+      try {
+        const res = await this.$axios.$get(`/api/games?q=${query}`)
+
+        this.videoGamesResults = res
+
+        this.isGamesLoading = false
+      } catch (error) {
+        throw new Error(error)
+      }
+    })
   }
 }
 </script>
